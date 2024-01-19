@@ -26,46 +26,61 @@ public class Robot extends TimedRobot {
    * initialization code.
    */
 
-   private TalonFX mLeftMain = new TalonFX(0, "rio");
-   private TalonFX mLeftFollower = new TalonFX(1, "rio");
+   private TalonFX mUpLeft = new TalonFX(0, "rio");
+   private TalonFX mDownLeft = new TalonFX(1, "rio");
 
-   private TalonFX mRightMain = new TalonFX(2, "rio");
-   private TalonFX mRightFollower = new TalonFX(3, "rio");
+   private TalonFX mUpRight = new TalonFX(2, "rio");
+   private TalonFX mDownRight = new TalonFX(3, "rio");
 
-   private TunableNumber leftTuner;
-   private TunableNumber rightTuner;
+   private TunableNumber topLeftTuner;
+   private TunableNumber bottomLeftTuner;
+   private TunableNumber topRightTuner;
+   private TunableNumber bottomRightTuner;
 
    private GenericEntry apply;
 
   @Override
   public void robotInit() {
-    mLeftMain.config_kP(0, 0.2);
-    mLeftMain.config_kI(0, 0.0);
-    mLeftMain.config_kD(0, 0.01);
-    mLeftMain.config_kF(0, 0.0);
-    mLeftMain.setNeutralMode(NeutralMode.Coast);
-    mLeftMain.configClosedloopRamp(0.5);
+    mUpLeft.config_kP(0, 0.2);
+    mUpLeft.config_kI(0, 0.0);
+    mUpLeft.config_kD(0, 0.01);
+    mUpLeft.config_kF(0, 0.0);
+    mUpLeft.setNeutralMode(NeutralMode.Coast);
+    mUpLeft.configClosedloopRamp(0.5);
 
-    mRightMain.config_kP(0, 0.2);
-    mRightMain.config_kI(0, 0.0);
-    mRightMain.config_kD(0, 0.01);
-    mRightMain.config_kF(0, 0.0);
-    mRightMain.setNeutralMode(NeutralMode.Coast);
-    mRightMain.configClosedloopRamp(0.5);
+    mDownLeft.config_kP(0, 0.2);
+    mDownLeft.config_kI(0, 0.0);
+    mDownLeft.config_kD(0, 0.01);
+    mDownLeft.config_kF(0, 0.0);
+    mDownLeft.setNeutralMode(NeutralMode.Coast);
+    mDownLeft.configClosedloopRamp(0.5);
+    
+    mUpRight.config_kP(0, 0.2);
+    mUpRight.config_kI(0, 0.0);
+    mUpRight.config_kD(0, 0.01);
+    mUpRight.config_kF(0, 0.0);
+    mUpRight.setNeutralMode(NeutralMode.Coast);
+    mUpRight.configClosedloopRamp(0.5);
 
-    mLeftFollower.setInverted(true);
-    mRightFollower.setInverted(false);
+    mDownRight.config_kP(0, 0.2);
+    mDownRight.config_kI(0, 0.0);
+    mDownRight.config_kD(0, 0.01);
+    mDownRight.config_kF(0, 0.0);
+    mDownRight.setNeutralMode(NeutralMode.Coast);
+    mDownRight.configClosedloopRamp(0.5);
     
     
-    leftTuner = new TunableNumber("Left Falcon RPM", 0.0, true);
-    rightTuner = new TunableNumber("Right Falcon RPM", 0.0, true);
+    topLeftTuner = new TunableNumber("Top Left Falcon RPM", 0.0, true);
+    bottomLeftTuner = new TunableNumber("Bottom Left Falcon RPM", 0.0, true);
+    topRightTuner = new TunableNumber("Top Right Falcon RPM", 0.0, true);
+    bottomRightTuner = new TunableNumber("Bottom Right Falcon RPM", 0.0, true);
     apply = Shuffleboard.getTab("Button").add("Button", false).withWidget(BuiltInWidgets.kToggleButton).getEntry();
 
-    mLeftMain.set(ControlMode.PercentOutput, 0.0);
-    mLeftFollower.set(ControlMode.Follower, 0.0);
+    mUpLeft.set(ControlMode.PercentOutput, 0.0);
+    mDownLeft.set(ControlMode.PercentOutput, 0.0);
 
-    mRightMain.set(ControlMode.PercentOutput, 0.0);
-    mRightFollower.set(ControlMode.Follower, 0.0);
+    mUpRight.set(ControlMode.PercentOutput, 0.0);
+    mDownRight.set(ControlMode.PercentOutput, 0.0);
   }
 
   @Override
@@ -84,24 +99,33 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     if (true) {
-      if(leftTuner.get() > 0.0) {
-        mLeftMain.set(ControlMode.Velocity, -leftTuner.get() / (10.0 / 2048.0));
+      if(topLeftTuner.get() > 0.0) {
+        mUpLeft.set(ControlMode.Velocity, -topLeftTuner.get() / (10.0 / 2048.0));
       }
 
+      if(bottomLeftTuner.get() > 0.0) {
+        mDownLeft.set(ControlMode.Velocity, bottomLeftTuner.get() / (10.0 / 2048.0));
+      }
 
-      if (rightTuner.get() > 0.0) {
-        mRightMain.set(ControlMode.Velocity, rightTuner.get() / (10.0 / 2048.0));
+      if (topRightTuner.get() > 0.0) {
+        mUpRight.set(ControlMode.Velocity, topRightTuner.get() / (10.0 / 2048.0));
+      }
+
+      if(bottomRightTuner.get() > 0.0) {
+        mDownRight.set(ControlMode.Velocity, -bottomRightTuner.get() / (10.0 / 2048.0));
       }
     } else {
-      mLeftMain.set(ControlMode.PercentOutput, 0.0);
-      mRightMain.set(ControlMode.PercentOutput, 0.0);
+      mUpLeft.set(ControlMode.PercentOutput, 0.0);
+      mDownLeft.set(ControlMode.PercentOutput, 0.0);
+      mUpRight.set(ControlMode.PercentOutput, 0.0);
+      mDownRight.set(ControlMode.PercentOutput, 0.0);
     }
 
-    SmartDashboard.putNumber("Left ACTUAL Speeds", mLeftMain.getSelectedSensorVelocity() * (10.0 / 2048.0));
-    // SmartDashboard.putNumber("Left Target", leftTuner.get());
+    SmartDashboard.putNumber("Top Left ACTUAL Speed", mUpLeft.getSelectedSensorVelocity() * (10.0 / 2048.0));
+    SmartDashboard.putNumber("Bottom Left ACTUAL Speed", mDownLeft.getSelectedSensorVelocity() * (10.0 / 2048.0));
 
-    SmartDashboard.putNumber("Right ACTUAL Speeds", mRightMain.getSelectedSensorVelocity() * (10.0 / 2048.0));
-    // SmartDashboard.putNumber("Right Target", rightTuner.get());
+    SmartDashboard.putNumber("Top Right ACTUAL Speed", mUpRight.getSelectedSensorVelocity() * (10.0 / 2048.0));
+    SmartDashboard.putNumber("Bottom Right ACTUAL Speed", mDownRight.getSelectedSensorVelocity() * (10.0 / 2048.0));
   }
 
   @Override
