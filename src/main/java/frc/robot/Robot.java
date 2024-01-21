@@ -8,10 +8,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -27,9 +24,9 @@ public class Robot extends TimedRobot {
    */
 
    private TalonFX mUpLeft = new TalonFX(0, "rio");
-   private TalonFX mDownLeft = new TalonFX(1, "rio");
+   private TalonFX mDownLeft = new TalonFX(2, "rio");
 
-   private TalonFX mUpRight = new TalonFX(2, "rio");
+   private TalonFX mUpRight = new TalonFX(1, "rio");
    private TalonFX mDownRight = new TalonFX(3, "rio");
 
    private TunableNumber topLeftTuner;
@@ -37,50 +34,50 @@ public class Robot extends TimedRobot {
    private TunableNumber topRightTuner;
    private TunableNumber bottomRightTuner;
 
-   private GenericEntry apply;
-
   @Override
   public void robotInit() {
-    mUpLeft.config_kP(0, 0.2);
+    mUpLeft.config_kP(0, 0.4);
     mUpLeft.config_kI(0, 0.0);
-    mUpLeft.config_kD(0, 0.01);
+    mUpLeft.config_kD(0, 0.02);
     mUpLeft.config_kF(0, 0.0);
     mUpLeft.setNeutralMode(NeutralMode.Coast);
-    mUpLeft.configClosedloopRamp(0.5);
-
-    mDownLeft.config_kP(0, 0.2);
-    mDownLeft.config_kI(0, 0.0);
-    mDownLeft.config_kD(0, 0.01);
-    mDownLeft.config_kF(0, 0.0);
-    mDownLeft.setNeutralMode(NeutralMode.Coast);
-    mDownLeft.configClosedloopRamp(0.5);
+    mUpLeft.configClosedloopRamp(0.1);
+    mUpLeft.setInverted(false);
     
-    mUpRight.config_kP(0, 0.2);
+    mUpRight.config_kP(0, 0.4);
     mUpRight.config_kI(0, 0.0);
-    mUpRight.config_kD(0, 0.01);
+    mUpRight.config_kD(0, 0.03);
     mUpRight.config_kF(0, 0.0);
     mUpRight.setNeutralMode(NeutralMode.Coast);
-    mUpRight.configClosedloopRamp(0.5);
+    mUpRight.configClosedloopRamp(0.1);
+    mUpRight.setInverted(true);
 
-    mDownRight.config_kP(0, 0.2);
+    mDownLeft.config_kP(0, 0.4);
+    mDownLeft.config_kI(0, 0.0);
+    mDownLeft.config_kD(0, 0.02);
+    mDownLeft.config_kF(0, 0.0);
+    mDownLeft.setNeutralMode(NeutralMode.Coast);
+    mDownLeft.configClosedloopRamp(0.1);
+    mDownLeft.setInverted(true);
+
+    mDownRight.config_kP(0, 0.4);
     mDownRight.config_kI(0, 0.0);
-    mDownRight.config_kD(0, 0.01);
+    mDownRight.config_kD(0, 0.03);
     mDownRight.config_kF(0, 0.0);
     mDownRight.setNeutralMode(NeutralMode.Coast);
-    mDownRight.configClosedloopRamp(0.5);
+    mDownRight.configClosedloopRamp(0.1);
+    mDownRight.setInverted(false);
     
     
-    topLeftTuner = new TunableNumber("Top Left Falcon RPM", 0.0, true);
-    bottomLeftTuner = new TunableNumber("Bottom Left Falcon RPM", 0.0, true);
-    topRightTuner = new TunableNumber("Top Right Falcon RPM", 0.0, true);
-    bottomRightTuner = new TunableNumber("Bottom Right Falcon RPM", 0.0, true);
-    apply = Shuffleboard.getTab("Button").add("Button", false).withWidget(BuiltInWidgets.kToggleButton).getEntry();
+    topLeftTuner = new TunableNumber("Top Left Falcon RPS", 0.0, true);
+    topRightTuner = new TunableNumber("Top Right Falcon RPS", 0.0, true);
+    bottomLeftTuner = new TunableNumber("Bottom Left Falcon RPS", 0.0, true);
+    bottomRightTuner = new TunableNumber("Bottom Right Falcon RPS", 0.0, true);
 
-    mUpLeft.set(ControlMode.PercentOutput, 0.0);
-    mDownLeft.set(ControlMode.PercentOutput, 0.0);
-
-    mUpRight.set(ControlMode.PercentOutput, 0.0);
-    mDownRight.set(ControlMode.PercentOutput, 0.0);
+    mUpLeft.set(ControlMode.Velocity, 0.0);
+    mUpRight.set(ControlMode.Velocity, 0.0);
+    mDownLeft.set(ControlMode.Velocity, 0.0);
+    mDownRight.set(ControlMode.Velocity, 0.0);
   }
 
   @Override
@@ -93,39 +90,41 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {}
 
   @Override
-  public void teleopInit() {
-  }
+  public void teleopInit() {}
 
   @Override
   public void teleopPeriodic() {
-    if (true) {
-      if(topLeftTuner.get() > 0.0) {
-        mUpLeft.set(ControlMode.Velocity, -topLeftTuner.get() / (10.0 / 2048.0));
-      }
 
-      if(bottomLeftTuner.get() > 0.0) {
-        mDownLeft.set(ControlMode.Velocity, bottomLeftTuner.get() / (10.0 / 2048.0));
-      }
-
-      if (topRightTuner.get() > 0.0) {
-        mUpRight.set(ControlMode.Velocity, topRightTuner.get() / (10.0 / 2048.0));
-      }
-
-      if(bottomRightTuner.get() > 0.0) {
-        mDownRight.set(ControlMode.Velocity, -bottomRightTuner.get() / (10.0 / 2048.0));
-      }
+    if(topLeftTuner.get() > 0.0) {
+      mUpLeft.set(ControlMode.Velocity, topLeftTuner.get() / (10.0 / 2048.0));
     } else {
-      mUpLeft.set(ControlMode.PercentOutput, 0.0);
-      mDownLeft.set(ControlMode.PercentOutput, 0.0);
-      mUpRight.set(ControlMode.PercentOutput, 0.0);
-      mDownRight.set(ControlMode.PercentOutput, 0.0);
+      mUpLeft.set(ControlMode.Velocity, 0.0);
     }
 
-    SmartDashboard.putNumber("Top Left ACTUAL Speed", mUpLeft.getSelectedSensorVelocity() * (10.0 / 2048.0));
-    SmartDashboard.putNumber("Bottom Left ACTUAL Speed", mDownLeft.getSelectedSensorVelocity() * (10.0 / 2048.0));
+    if (topRightTuner.get() > 0.0) {
+      mUpRight.set(ControlMode.Velocity, topRightTuner.get() / (10.0 / 2048.0));
+    } else { 
+      mUpRight.set(ControlMode.Velocity, 0.0);
+    }
 
-    SmartDashboard.putNumber("Top Right ACTUAL Speed", mUpRight.getSelectedSensorVelocity() * (10.0 / 2048.0));
-    SmartDashboard.putNumber("Bottom Right ACTUAL Speed", mDownRight.getSelectedSensorVelocity() * (10.0 / 2048.0));
+    if(bottomLeftTuner.get() > 0.0) {
+      mDownLeft.set(ControlMode.Velocity, bottomLeftTuner.get() / (10.0 / 2048.0));
+    } else {
+      mDownLeft.set(ControlMode.Velocity, 0.0);
+    }
+
+    if(bottomRightTuner.get() > 0.0) {
+      mDownRight.set(ControlMode.Velocity, bottomRightTuner.get() / (10.0 / 2048.0));
+    } else {
+      mDownRight.set(ControlMode.Velocity, 0.0);
+    }
+
+    // getSelectedSensorVelocity is in ticks/100ms, need to multiply by rot/2048 ticks to get rot/100ms, then 1000ms/1s to get rot/s
+    SmartDashboard.putNumber("Top Left ACTUAL Speed RPS", Math.abs(mUpLeft.getSelectedSensorVelocity() * (10.0 / 2048.0)));
+    SmartDashboard.putNumber("Bottom Left ACTUAL Speed RPS", Math.abs(mDownLeft.getSelectedSensorVelocity() * (10.0 / 2048.0)));
+
+    SmartDashboard.putNumber("Top Right ACTUAL Speed RPS", Math.abs(mUpRight.getSelectedSensorVelocity() * (10.0 / 2048.0)));
+    SmartDashboard.putNumber("Bottom Right ACTUAL Speed RPS", Math.abs(mDownRight.getSelectedSensorVelocity() * (10.0 / 2048.0)));
   }
 
   @Override
