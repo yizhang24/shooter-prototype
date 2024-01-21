@@ -36,6 +36,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
+    // P -> proportional to error
+    // I -> error accumulated
+    // D -> dampens rapid changes
     mUpLeft.config_kP(0, 0.4);
     mUpLeft.config_kI(0, 0.0);
     mUpLeft.config_kD(0, 0.02);
