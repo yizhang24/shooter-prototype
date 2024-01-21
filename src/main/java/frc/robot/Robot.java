@@ -39,9 +39,12 @@ public class Robot extends TimedRobot {
     // P -> proportional to error
     // I -> error accumulated
     // D -> dampens rapid changes
+
+    // First, raise D value, then lower P value if needed
+
     mUpLeft.config_kP(0, 0.4);
     mUpLeft.config_kI(0, 0.0);
-    mUpLeft.config_kD(0, 0.02);
+    mUpLeft.config_kD(0, 0.03);
     mUpLeft.config_kF(0, 0.0);
     mUpLeft.setNeutralMode(NeutralMode.Coast);
     mUpLeft.configClosedloopRamp(0.1);
@@ -57,7 +60,7 @@ public class Robot extends TimedRobot {
 
     mDownLeft.config_kP(0, 0.4);
     mDownLeft.config_kI(0, 0.0);
-    mDownLeft.config_kD(0, 0.02);
+    mDownLeft.config_kD(0, 0.03);
     mDownLeft.config_kF(0, 0.0);
     mDownLeft.setNeutralMode(NeutralMode.Coast);
     mDownLeft.configClosedloopRamp(0.1);
