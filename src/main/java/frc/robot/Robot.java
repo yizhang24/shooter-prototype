@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -131,6 +132,11 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putNumber("Top Right ACTUAL Speed RPS", Math.abs(mUpRight.getSelectedSensorVelocity() * (10.0 / 2048.0)));
     SmartDashboard.putNumber("Bottom Right ACTUAL Speed RPS", Math.abs(mDownRight.getSelectedSensorVelocity() * (10.0 / 2048.0)));
+
+    SmartDashboard.putNumber("Top Left Percent Output", 100 * mUpLeft.getMotorOutputVoltage() / RobotController.getBatteryVoltage());
+    SmartDashboard.putNumber("Top Right Percent Output", 100 * mUpRight.getMotorOutputVoltage() / RobotController.getBatteryVoltage());
+    SmartDashboard.putNumber("Bottom Left Percent Output", 100 * mDownLeft.getMotorOutputVoltage() / RobotController.getBatteryVoltage());
+    SmartDashboard.putNumber("Bottom Right Percent Output", 100 * mDownRight.getMotorOutputVoltage() / RobotController.getBatteryVoltage());
   }
 
   @Override
